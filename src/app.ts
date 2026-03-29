@@ -13,12 +13,20 @@ app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 
 
-//config route
+// config static files : images , js, css
+app.use(express.static('public'))
+
+
+// config req.body
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+//config route 
 webRoute(app);
 
 
-// config static files : images , js, css
-app.use(express.static('public'))
+
+
 
 
 

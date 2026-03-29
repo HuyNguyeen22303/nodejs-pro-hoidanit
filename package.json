@@ -1,0 +1,24 @@
+{
+  "name": "nodejs-pro-hoidanit",
+  "version": "1.0.0",
+  "description": "Nodejs pro HoiDanIT",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HuyNguyeen22303/nodejs-pro-hoidanit.git"
+  },
+  "keywords": [
+    "Nodejs",
+    "TypeScript",
+    "mongoDB"
+  ],
+  "author": "Huy Nguyen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HuyNguyeen22303/nodejs-pro-hoidanit/issues"
+  },
+  "homepage": "https://github.com/HuyNguyeen22303/nodejs-pro-hoidanit#readme"
+}

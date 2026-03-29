@@ -1,19 +1,15 @@
 import express, { Express } from 'express';
+import { getCreateUserPage, getHomePage } from "../controllers/user.controller";
 const router = express.Router();
 
 const webRoute = (app: Express) => {
-    router.get("/", (req, res) => {
-        res.render('home.ejs', { title: 'Hey', message: 'Hello there!' })
-    })
+    router.get("/", getHomePage)
 
 
-    router.get("/test", (req, res) => {
-        res.send("Hello test! dasdasd");
-    })
+    router.get("/create-user", getCreateUserPage)
 
-    router.get("/abc", (req, res) => {
-        res.send("Hello abc!");
-    })
+
+
 
     app.use("/", router); //base url 
 }

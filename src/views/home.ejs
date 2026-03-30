@@ -14,9 +14,50 @@
 </head>
 
 <body>
-    <h1>Hello EJS From controller</h1>
-    <a href="/create-user" class="btn btn-primary">Create a user</a>
+    <div style="margin: 25px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h1>List User:
+            </h1>
+            <div>
+                <a href="/create-user" class="btn btn-primary">Create a user</a>
+            </div>
 
+        </div>
+        <hr>
+        <div>Table</div>
+        <table class="table-hover table table-bordered">
+            <thead>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Address</th>
+                <th>Action</th>
+
+            </thead>
+            <tbody>
+                <% users.forEach(function(user) { %>
+                    <tr>
+                        <td>
+                            <%= user.id %>
+                        </td>
+                        <td>
+                            <%= user.name %>
+                        </td>
+                        <td>
+                            <%= user.email %>
+                        </td>
+                        <td>
+                            <%= user.address %>
+                        </td>
+                        <td>
+                            <button class="btn btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                    <% }); %>
+
+            </tbody>
+        </table>
+    </div>
 </body>
 
 </html>

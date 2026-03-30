@@ -2,6 +2,7 @@
 import express from "express";
 import 'dotenv/config';
 import webRoute from "./routes/web";
+import getConnection from "./config/database";
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -26,7 +27,7 @@ webRoute(app);
 
 
 
-
+getConnection();
 
 
 

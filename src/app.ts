@@ -1,7 +1,7 @@
 // const express = require("express");
 import express from "express";
 import 'dotenv/config';
-import webRoute from "./routes/web";
+import webRoute from "routes/web";
 
 
 const app = express();

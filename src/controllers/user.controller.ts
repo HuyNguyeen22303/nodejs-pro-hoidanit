@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getAllUser, handleCreateUser } from "../services/user.service";
+import { getAllUser, handleCreateUser } from "services/user.service";
 
 
 

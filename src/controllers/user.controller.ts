@@ -1,5 +1,6 @@
+import getConnection from "config/database";
 import { Request, Response } from "express";
-import { getAllUser, handleCreateUser } from "services/user.service";
+import { getAllUser, handleCreateUser, handleDeleteUser, getUserById } from "services/user.service";
 
 
 
@@ -22,6 +23,30 @@ const postCreateUser = async (req: Request, res: Response) => {
 }
 
 
+const postDeleteUser = async (req: Request, res: Response) => {
+
+    // console.log(req.params);
+    const { id } = req.params;
+    await handleDeleteUser(id);
+    return res.redirect("/");
+}
 
 
-export { getHomePage, getCreateUserPage, postCreateUser };
+
+const getViewUser = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const users = await getUserById(id);
+    return res.render("view-user", { users: users });
+}
+
+
+
+
+
+
+
+
+
+
+
+export { getHomePage, getCreateUserPage, postCreateUser, postDeleteUser, getViewUser };

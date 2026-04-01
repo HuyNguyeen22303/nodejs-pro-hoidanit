@@ -1,6 +1,6 @@
 import getConnection from "config/database";
 import { Request, Response } from "express";
-import { getAllUser, handleCreateUser, handleDeleteUser, getUserById } from "services/user.service";
+import { getAllUser, handleCreateUser, handleDeleteUser, getUserById, editUserById } from "services/user.service";
 
 
 
@@ -40,6 +40,12 @@ const getViewUser = async (req: Request, res: Response) => {
 }
 
 
+const postEditUser = async (req: Request, res: Response) => {
+    const { fullName, email, address } = req.body;
+    const { id } = req.params;
+    await editUserById(fullName, email, address, id);
+    res.redirect("/");
+}
 
 
 
@@ -49,4 +55,5 @@ const getViewUser = async (req: Request, res: Response) => {
 
 
 
-export { getHomePage, getCreateUserPage, postCreateUser, postDeleteUser, getViewUser };
+
+export { getHomePage, getCreateUserPage, postCreateUser, postDeleteUser, getViewUser, postEditUser };

@@ -34,52 +34,41 @@ const handleCreateUser = async (fullName: string, email: string, address: string
 
 
 const handleDeleteUser = async (id: string) => {
-    const connection = await getConnection();
-    try {
-        const sql = 'DELETE FROM `user` WHERE `id` = ?';
-        const values = [id];
-
-        const [result, fields] = await connection.execute(sql, values);
-
-
-        return result;
-    } catch (err) {
-        return err;
-    }
+    const deleteUser = await prisma.user.delete({
+        where: { id: +id }
+    });
+    return deleteUser;
 }
 
 
 
 
 const getUserById = async (id: string) => {
-    const connection = await getConnection()
-    try {
-        const sql = 'SELECT * FROM `user` WHERE `id` = ?';
-        const values = [id];
+    const userById = await prisma.user.findUnique({
+        where: { id: +id }
+    })
 
-        const [result, fields] = await connection.execute(sql, values) as any[];;
+    return userById;
 
-        return result[0];
-    } catch (err) {
-        return [];
-    }
+
 }
 
-const editUserById = async (fullName: string, email: string, address: string, id: string) => {
-    const connection = await getConnection()
-    try {
-        const sql = 'UPDATE `user` SET `name` = ?, `email` = ? , `address` = ? WHERE `id` = ?';
-        const values = [fullName, email, address, id];
+const updateByID = async (fullName: string, email: string, address: string, id: string) => {
 
-        const [result, fields] = await connection.execute(sql, values);
+    const updatedUser = await prisma.user.update({
+        where: { id: +id },
+        data: {
+            name: fullName,
+            email: email,
+            address: address
+        }
 
-        console.log(result);
-        console.log(fields);
-    } catch (err) {
-        console.log(err);
-    }
+    })
+    return updatedUser;
+
+
 }
 
 
 
-export { handleCreateUser, getAllUser, handleDeleteUser, getUserById, editUserById }
+export { handleCreateUser, getAllUser, handleDeleteUser, getUserById, updateByID }

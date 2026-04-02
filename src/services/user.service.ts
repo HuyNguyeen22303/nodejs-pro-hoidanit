@@ -11,17 +11,8 @@ import 'dotenv/config';
 
 
 const getAllUser = async () => {
-    const connection = await getConnection()
-    try {
-        const [results, fields] = await connection.query(
-            'SELECT * FROM `user`'
-        );
-
-        return results; // results contains rows returned by server
-
-    } catch (err) {
-        return [];
-    }
+    const users = prisma.user.findMany();
+    return users;
 
 
 }

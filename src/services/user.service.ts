@@ -10,7 +10,7 @@ const getAllUser = async () => {
     const connection = await getConnection()
     try {
         const [results, fields] = await connection.query(
-            'SELECT * FROM `users`'
+            'SELECT * FROM `user`'
         );
 
         return results; // results contains rows returned by server
@@ -27,7 +27,7 @@ const handleCreateUser = async (fullName: string, email: string, address: string
 
     const connection = await getConnection();
     try {
-        const sql = 'INSERT INTO `users`(`name`, `email`, `address`) VALUES (?, ?, ?)';
+        const sql = 'INSERT INTO `user`(`name`, `email`, `address`) VALUES (?, ?, ?)';
         const values = [fullName, email, address];
 
         const [result, fields] = await connection.execute(sql, values);
@@ -42,10 +42,10 @@ const handleCreateUser = async (fullName: string, email: string, address: string
 }
 
 
-const handleDeleteUser = async (id) => {
+const handleDeleteUser = async (id: string) => {
     const connection = await getConnection();
     try {
-        const sql = 'DELETE FROM `users` WHERE `id` = ?';
+        const sql = 'DELETE FROM `user` WHERE `id` = ?';
         const values = [id];
 
         const [result, fields] = await connection.execute(sql, values);
@@ -60,13 +60,13 @@ const handleDeleteUser = async (id) => {
 
 
 
-const getUserById = async (id) => {
+const getUserById = async (id: string) => {
     const connection = await getConnection()
     try {
-        const sql = 'SELECT * FROM `users` WHERE `id` = ?';
+        const sql = 'SELECT * FROM `user` WHERE `id` = ?';
         const values = [id];
 
-        const [result, fields] = await connection.execute(sql, values);
+        const [result, fields] = await connection.execute(sql, values) as any[];;
 
         return result[0];
     } catch (err) {
@@ -74,10 +74,10 @@ const getUserById = async (id) => {
     }
 }
 
-const editUserById = async (fullName: string, email: string, address: string, id) => {
+const editUserById = async (fullName: string, email: string, address: string, id: string) => {
     const connection = await getConnection()
     try {
-        const sql = 'UPDATE `users` SET `name` = ?, `email` = ? , `address` = ? WHERE `id` = ?';
+        const sql = 'UPDATE `user` SET `name` = ?, `email` = ? , `address` = ? WHERE `id` = ?';
         const values = [fullName, email, address, id];
 
         const [result, fields] = await connection.execute(sql, values);

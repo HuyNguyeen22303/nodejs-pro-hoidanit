@@ -26,7 +26,9 @@ const postCreateUser = async (req: Request, res: Response) => {
 const postDeleteUser = async (req: Request, res: Response) => {
 
     // console.log(req.params);
-    const { id } = req.params;
+    // const { id } = req.params;
+    const { id } = req.params as { id: string };
+
     await handleDeleteUser(id);
     return res.redirect("/");
 }
@@ -34,7 +36,7 @@ const postDeleteUser = async (req: Request, res: Response) => {
 
 
 const getViewUser = async (req: Request, res: Response) => {
-    const { id } = req.params;
+    const { id } = req.params as { id: string };
     const users = await getUserById(id);
     return res.render("view-user", { users: users });
 }
@@ -42,7 +44,7 @@ const getViewUser = async (req: Request, res: Response) => {
 
 const postEditUser = async (req: Request, res: Response) => {
     const { fullName, email, address } = req.body;
-    const { id } = req.params;
+    const { id } = req.params as { id: string };
     await editUserById(fullName, email, address, id);
     res.redirect("/");
 }

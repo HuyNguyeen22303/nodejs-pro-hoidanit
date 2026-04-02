@@ -1,6 +1,10 @@
 import mysql from 'mysql2/promise';
 import getConnection from 'config/database';
-
+import { Prisma } from '@prisma/client';
+import { PrismaClient } from '../../generated/prisma';
+import { name } from 'ejs';
+import { prisma } from 'config/client';
+import 'dotenv/config';
 
 
 
@@ -25,19 +29,15 @@ const getAllUser = async () => {
 
 const handleCreateUser = async (fullName: string, email: string, address: string) => {
 
-    const connection = await getConnection();
-    try {
-        const sql = 'INSERT INTO `user`(`name`, `email`, `address`) VALUES (?, ?, ?)';
-        const values = [fullName, email, address];
 
-        const [result, fields] = await connection.execute(sql, values);
-
-
-    } catch (err) {
-        console.log(err);
-    }
-
-
+    const user = await prisma.user.create({
+        data: {
+            name: fullName,
+            email: email,
+            address: address
+        },
+    });
+    return user;
 
 }
 

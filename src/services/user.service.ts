@@ -23,9 +23,15 @@ const handleCreateUser = async (fullName: string, email: string, address: string
 
     const user = await prisma.user.create({
         data: {
-            name: fullName,
-            email: email,
-            address: address
+            id: 2,
+            accountType: email,
+            address: address,
+            fullName: fullName,
+            password: "",
+            username: "",
+
+
+
         },
     });
     return user;
@@ -58,8 +64,9 @@ const updateByID = async (fullName: string, email: string, address: string, id: 
     const updatedUser = await prisma.user.update({
         where: { id: +id },
         data: {
-            name: fullName,
-            email: email,
+
+            fullName: fullName,
+            // email: email,
             address: address
         }
 

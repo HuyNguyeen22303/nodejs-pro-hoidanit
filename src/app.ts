@@ -2,6 +2,7 @@
 import express from "express";
 import 'dotenv/config';
 import webRoute from "routes/web";
+import initDatabase from "config/seed";
 
 
 const app = express();
@@ -26,7 +27,9 @@ app.use(express.urlencoded({ extended: true }));
 webRoute(app);
 
 
+// seeding data
 
+initDatabase();
 
 
 

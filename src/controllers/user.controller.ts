@@ -1,6 +1,6 @@
 import getConnection from "config/database";
 import { Request, Response } from "express";
-import { getAllUser, handleCreateUser, handleDeleteUser, getUserById, updateByID } from "services/user.service";
+import { getAllUser, handleCreateUser, handleDeleteUser, getUserById, updateByID, getAllRole } from "services/user.service";
 
 
 
@@ -11,14 +11,17 @@ const getHomePage = async (req: Request, res: Response) => {
 }
 
 
-const getCreateUserPage = (req: Request, res: Response) => {
+const getCreateUserPage = async (req: Request, res: Response) => {
+    const roles = await getAllRole();
 
-    return res.render('admin/user/create.ejs')
+    return res.render('admin/user/create.ejs', {
+        roles: roles
+    })
 }
 
 const postCreateUser = async (req: Request, res: Response) => {
-    const { fullName, email, address } = req.body;
-    await handleCreateUser(fullName, email, address)
+    const { fullName, username, phone, role, address } = req.body;
+    // await handleCreateUser(fullName, email, address)
     return res.redirect("/");
 }
 

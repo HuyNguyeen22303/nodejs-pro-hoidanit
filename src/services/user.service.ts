@@ -5,6 +5,7 @@ import { PrismaClient } from '../../generated/prisma';
 import { name } from 'ejs';
 import { prisma } from 'config/client';
 import 'dotenv/config';
+import { ACCOUNT_TYPE } from 'config/constants';
 
 
 
@@ -25,23 +26,24 @@ const getAllRole = async () => {
 
 }
 
-const handleCreateUser = async (fullName: string, email: string, address: string) => {
+const handleCreateUser = async (username: string, password: string, fullName: string, address: string, phone: string, accountType: string, avatar: string) => {
 
 
-    const user = await prisma.user.create({
+    const newUser = await prisma.user.create({
         data: {
-            id: 2,
-            accountType: email,
-            address: address,
-            fullName: fullName,
-            password: "",
-            username: "",
 
+            username: username,
+            password: "123456",
+            fullName: fullName,
+            address: address,
+            phone: phone,
+            accountType: ACCOUNT_TYPE.SYSTEM,
+            avatar: avatar
 
 
         },
     });
-    return user;
+    return newUser;
 
 }
 

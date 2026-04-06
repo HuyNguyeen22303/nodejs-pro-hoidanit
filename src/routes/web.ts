@@ -21,9 +21,7 @@ const webRoute = (app: Express) => {
     router.get("/admin/order", getAdminOderPage)
     router.get("/admin/create-user", getCreateUserPage)
     router.post("/admin/handle-create-user", fileUploadMiddleware("avatar"), postCreateUser)
-    // router.post("/admin/handle-create-user", fileUploadMiddleware("avatar"), (req, res) => {
-    //     res.send("Up file");
-    // })
+
 
 
     app.use("/", router); //base url 

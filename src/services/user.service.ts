@@ -7,6 +7,12 @@ import { prisma } from 'config/client';
 import 'dotenv/config';
 import { ACCOUNT_TYPE } from 'config/constants';
 
+import bcrypt from 'bcrypt';
+const saltRounds = 10;
+
+const hashPassword = async (plainText: string) => {
+    return await bcrypt.hash(plainText, saltRounds)
+}
 
 
 
@@ -27,13 +33,13 @@ const getAllRole = async () => {
 }
 
 const handleCreateUser = async (username: string, password: string, fullName: string, address: string, phone: string, accountType: string, avatar: string) => {
-
+    const defaultPassword = await hashPassword("123456")
 
     const newUser = await prisma.user.create({
         data: {
 
             username: username,
-            password: "123456",
+            password: defaultPassword,
             fullName: fullName,
             address: address,
             phone: phone,
@@ -87,4 +93,4 @@ const updateByID = async (fullName: string, email: string, address: string, id: 
 
 
 
-export { handleCreateUser, getAllUser, handleDeleteUser, getUserById, updateByID, getAllRole }
+export { handleCreateUser, getAllUser, handleDeleteUser, getUserById, updateByID, getAllRole, hashPassword }

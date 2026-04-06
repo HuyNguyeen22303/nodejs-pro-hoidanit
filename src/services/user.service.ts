@@ -32,7 +32,7 @@ const getAllRole = async () => {
 
 }
 
-const handleCreateUser = async (username: string, password: string, fullName: string, address: string, phone: string, accountType: string, avatar: string) => {
+const handleCreateUser = async (username: string, password: string, fullName: string, address: string, phone: string, accountType: string, avatar: string, role: string) => {
     const defaultPassword = await hashPassword("123456")
 
     const newUser = await prisma.user.create({
@@ -44,8 +44,8 @@ const handleCreateUser = async (username: string, password: string, fullName: st
             address: address,
             phone: phone,
             accountType: ACCOUNT_TYPE.SYSTEM,
-            avatar: avatar
-
+            avatar: avatar,
+            roleId: +role
 
         },
     });

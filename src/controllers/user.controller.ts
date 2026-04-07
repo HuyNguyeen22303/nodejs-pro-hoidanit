@@ -37,7 +37,7 @@ const postDeleteUser = async (req: Request, res: Response) => {
     const { id } = req.params as { id: string };
 
     await handleDeleteUser(id);
-    return res.redirect("/");
+    return res.redirect("/admin/user");
 }
 
 
@@ -45,7 +45,11 @@ const postDeleteUser = async (req: Request, res: Response) => {
 const getViewUser = async (req: Request, res: Response) => {
     const { id } = req.params as { id: string };
     const users = await getUserById(id);
-    return res.render("view-user", { users: users });
+    const roles = await getAllRole(); // Lấy đc roles(1 la admin 2 la user) của bảng role 
+    return res.render("admin/user/detail.ejs", {
+        users: users,
+        roles: roles
+    });
 }
 
 

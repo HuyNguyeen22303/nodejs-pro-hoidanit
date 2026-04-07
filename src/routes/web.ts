@@ -9,8 +9,8 @@ const webRoute = (app: Express) => {
     router.get("/", getHomePage)
 
 
-    router.post("/handle-delete-user/:id", postDeleteUser)
-    router.get("/handle-view-user/:id", getViewUser)
+
+
     router.post("/handle-edit-user/:id", postEditUser)
 
     // route admin 
@@ -21,8 +21,8 @@ const webRoute = (app: Express) => {
     router.get("/admin/order", getAdminOderPage)
     router.get("/admin/create-user", getCreateUserPage)
     router.post("/admin/handle-create-user", fileUploadMiddleware("avatar"), postCreateUser)
-
-
+    router.post("/admin/delete-user/:id", postDeleteUser)
+    router.get("/admin/detail-user/:id", getViewUser)
 
     app.use("/", router); //base url 
 }

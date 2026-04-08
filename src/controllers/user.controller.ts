@@ -5,9 +5,9 @@ import { getAllUser, handleCreateUser, handleDeleteUser, getUserById, updateByID
 
 
 const getHomePage = async (req: Request, res: Response) => {
-    const users = await getAllUser();
 
-    return res.render('home.ejs', { users: users });
+
+    return res.render('client/home/show.ejs',);
 }
 
 

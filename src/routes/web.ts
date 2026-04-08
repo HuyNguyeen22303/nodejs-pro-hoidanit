@@ -2,11 +2,13 @@ import express, { Express } from 'express';
 import { getCreateUserPage, getHomePage, postCreateUser, postDeleteUser, getViewUser, postEditUser } from "controllers/user.controller";
 import { getDashboardPage, getAdminUserPage, getAdminProductPage, getAdminOderPage } from 'controllers/admin/dashboard.controller';
 import fileUploadMiddleware from '../middleware/multer';
+import { getDetailPage } from 'controllers/client/product.controller';
 const router = express.Router();
 const multer = require('multer')
 const upload = multer({ dest: 'uploads/' })
 const webRoute = (app: Express) => {
     router.get("/", getHomePage)
+    router.get("/product/:id", getDetailPage)
 
 
 

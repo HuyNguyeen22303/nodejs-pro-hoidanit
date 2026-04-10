@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="Hỏi Dân IT - Dự án laptopshop" />
+    <meta name="author" content="Hỏi Dân IT" />
+    <title>Products - Hỏi Dân IT</title>
+    <link href="/admin/css/styles.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(() => {
+            const avatarFile = $("#avatarFile");
+            avatarFile.change(function (e) {
+                const imgURL = URL.createObjectURL(e.target.files[0]);
+                $("#avatarPreview").attr("src", imgURL);
+                $("#avatarPreview").css({ "display": "block" });
+            });
+        });
+    </script>
+
+</head>
+
+<body class="sb-nav-fixed">
+    <%- include('../layout/header.ejs'); %>
+        <div id="layoutSidenav">
+            <%- include('../layout/sidebar.ejs'); %>
+                <div id="layoutSidenav_content">
+                    <main>
+                        <div class="container-fluid px-4">
+                            <h1 class="mt-4">Manage Products</h1>
+                            <ol class="breadcrumb mb-4">
+                                <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+                                <li class="breadcrumb-item active">Products</li>
+                            </ol>
+                            <div class="row">
+                                <div class="col-6 mx-auto">
+
+
+
+                                    <h5 style="padding: 10px 0px;">Detail a product</h5>
+                                    <form action="/admin/update-product/<%=products.id%>" method="post"
+                                        enctype="multipart/form-data">
+                                        <div class="mb-3">
+                                            <label class="form-label">Name: </label>
+                                            <input name="name" type="text" class="form-control" placeholder="Your name"
+                                                value="<%= products.name%>">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Price: </label>
+                                            <input name="price" type="number" class="form-control"
+                                                value="<%= products.price%>">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Detail Description: </label>
+                                            <textarea class="form-control" name="detailDesc"
+                                                rows="2"><%= products.detailDesc%></textarea>
+                                        </div>
+                                        <div class="row">
+                                            <div class="mb-3 col-6">
+                                                <label class="form-label">Sort Description: </label>
+                                                <input name="shortDesc" type="text" class="form-control"
+                                                    value="<%= products.shortDesc%>">
+                                            </div>
+                                            <div class="mb-3 col-6">
+                                                <label class="form-label">Quantity: </label>
+                                                <input name="quantity" type="number" class="form-control"
+                                                    value="<%= products.quantity %>">
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="mb-3 col-6">
+                                                <label class="form-label">Factory</label>
+                                                <select name="factory" class="form-select">
+                                                    <% factoryOptions.forEach((factoryOption,index)=> { %>
+                                                        <option value="<%-factoryOption.value %>"
+                                                            <%=factoryOption.value===products.factory ? 'selected' : ''
+                                                            %>>
+                                                            <%- factoryOption.name %>
+                                                        </option>
+                                                        <%})%>
+                                                </select>
+                                            </div>
+                                            <div class="mb-3 col-6">
+                                                <label class="form-label">Target</label>
+                                                <select name="target" class="form-select">
+                                                    <% targetOptions.forEach((targetOption,index)=> { %>
+                                                        <option value="<%-targetOption.value %>"
+                                                            <%=targetOption.value===products.target ? 'selected' : '' %>
+                                                            >
+                                                            <%- targetOption.name %>
+                                                        </option>
+                                                        <%})%>
+                                                </select>
+                                            </div>
+                                        </div>
+
+
+
+
+                                        <div class="mb-3">
+                                            <label for="formFile" class="form-label">Image:</label>
+                                            <input class="form-control" type="file" id="avatarFile"
+                                                accept=".png, .jpg, .jpeg" name="image">
+
+                                        </div>
+                                        <% if(products.image){ %>
+                                            <img style="max-height: 250px; display: block;" alt="avatar preview" <%/*
+                                                Nhớ nha block mày là thiên tày */%>
+                                            id="avatarPreview" src="/images/product/<%= products.image %>" />
+                                                <% } else{ %>
+                                                    <img style="max-height: 250px; display: none;" alt="avatar preview"
+                                                        id="avatarPreview" />
+                                                    <% } %>
+
+
+
+                                                        <div class="mb-3">
+                                                            <button type="submit"
+                                                                class="btn btn-warning mt-3">Submit</button>
+                                                        </div>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </main>
+                    <%- include('../layout/footer.ejs'); %>
+
+                </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+            crossorigin="anonymous"></script>
+        <script src="/admin/js/scripts.js"></script>
+
+</body>
+
+</html>

@@ -1,7 +1,7 @@
 import * as z from "zod";
 
 export const productSchema = z.object({
-
+    id: z.number().optional(),
     name: z.string().trim().min(1, { message: 'Tên không được để trống tối thiểu là 1 ký tự' }),
     price: z.string()
         .transform((val) => (val === "" ? 0 : Number(val)))

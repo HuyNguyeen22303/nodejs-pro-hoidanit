@@ -32,4 +32,42 @@ const getAllProduct = async () => {
 }
 
 
-export { createProduct, getAllProduct }
+
+const getProductById = async (id: number) => {
+
+    const products = await prisma.product.findUnique({
+        where: { id: id },
+    });
+    return products;
+}
+
+
+const postUpdateProductById = async (id: number, name: string, price: number, detailDesc: string, shortDesc: string, quantity: number, factory: string, target: string, image: string) => {
+    const updateProduct = await prisma.product.update({
+        where: { id: id },
+        data: {
+            name: name,
+            price: price,
+            detailDesc: detailDesc,
+            shortDesc: shortDesc,
+            quantity: quantity,
+            factory: factory,
+            target: target,
+            ...(image !== null && { image: image })
+
+        },
+    });
+}
+
+
+const postDeleteProductById = async (id: number) => {
+    const deleteProduct = await prisma.product.delete({
+        where: {
+            id: id
+        },
+    });
+    return deleteProduct
+}
+
+
+export { createProduct, getAllProduct, getProductById, postUpdateProductById, postDeleteProductById }

@@ -3,7 +3,8 @@ import { getCreateUserPage, getHomePage, postCreateUser, postDeleteUser, getView
 import { getDashboardPage, getAdminUserPage, getAdminProductPage, getAdminOderPage } from 'controllers/admin/dashboard.controller';
 import fileUploadMiddleware from '../middleware/multer';
 import { getDetailPage } from 'controllers/client/product.controller';
-import { getAdminCreateProductPage, postAdminCreateProduct } from 'controllers/admin/product.controller';
+import { getAdminCreateProductPage, postAdminCreateProduct, getAdminDetailProduct, postAdminUpdateProduct, postDeleteProduct } from 'controllers/admin/product.controller';
+import { get } from 'http';
 const router = express.Router();
 const multer = require('multer')
 const upload = multer({ dest: 'uploads/' })
@@ -33,6 +34,12 @@ const webRoute = (app: Express) => {
 
     router.get("/admin/create-product", getAdminCreateProductPage)
     router.post("/admin/create-product", fileUploadMiddleware("image", "images/product"), postAdminCreateProduct)
+    router.get("/admin/detail-product/:id", getAdminDetailProduct)
+    router.post("/admin/update-product/:id", fileUploadMiddleware("image", "images/product"), postAdminUpdateProduct)
+    router.post("/admin/delete-product/:id", postDeleteProduct)
+
+
+
     app.use("/", router); //base url 
 }
 

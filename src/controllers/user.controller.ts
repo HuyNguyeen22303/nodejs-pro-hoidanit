@@ -1,13 +1,14 @@
 import getConnection from "config/database";
 import { Request, Response } from "express";
+import { getAllProduct } from "services/client/item.service";
 import { getAllUser, handleCreateUser, handleDeleteUser, getUserById, updateByID, getAllRole } from "services/user.service";
 
 
 
 const getHomePage = async (req: Request, res: Response) => {
+    const products = await getAllProduct();
 
-
-    return res.render('client/home/show.ejs',);
+    return res.render('client/home/show.ejs', { products });
 }
 
 

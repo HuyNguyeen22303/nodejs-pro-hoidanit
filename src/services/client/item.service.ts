@@ -9,4 +9,14 @@ const getAllProduct = async () => {
 }
 
 
-export { getAllProduct }
+
+const getProductById = async (id: number) => {
+    return prisma.product.findUnique({
+        where: {
+            id: id
+        }
+    })
+}
+
+
+export { getAllProduct, getProductById }

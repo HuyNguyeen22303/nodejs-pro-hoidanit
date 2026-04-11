@@ -1,10 +1,12 @@
 import { Request, Response } from "express";
+import { getProductById } from "services/client/item.service";
 
 
-const getDetailPage = (req: Request, res: Response) => {
+const getDetailPage = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const products = await getProductById(+id);
 
-
-    return res.render("client/product/detail.ejs");
+    return res.render("client/product/detail.ejs", { products });
 
 }
 

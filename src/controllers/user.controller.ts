@@ -66,10 +66,19 @@ const postEditUser = async (req: Request, res: Response) => {
 
 
 
+const getLoginPage = async (req: Request, res: Response) => {
+
+    res.render("client/user/login.ejs");
+}
 
 
 
 
 
 
-export { getHomePage, getCreateUserPage, postCreateUser, postDeleteUser, getViewUser, postEditUser };
+
+
+
+
+
+export { getHomePage, getCreateUserPage, postCreateUser, postDeleteUser, getViewUser, postEditUser, getLoginPage };

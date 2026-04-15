@@ -7,7 +7,14 @@ import { callbackify } from "util";
 
 
 const configPassPortLocal = () => {
-    passport.use(new LocalStrategy(async function verify(username, password, callback) {
+    passport.use(new LocalStrategy({
+        passReqToCallback: true
+
+    }, async function verify(req, username, password, callback) {
+        const { session } = req as any;
+        if (session?.messages?.length) {
+            session.messages = [];
+        }
         console.log("Check user and password", username, password)
         // check user exist in database
         const user = await prisma.user.findUnique({
@@ -19,7 +26,7 @@ const configPassPortLocal = () => {
         if (!user) {
             // throw Error
             // throw new Error(`Username: ${username} is not found`);
-            return callback(null, false, { message: `Username: ${username} is not found` });
+            return callback(null, false, { message: `Username/password invalid` });
         }
 
 
@@ -27,7 +34,7 @@ const configPassPortLocal = () => {
         const isMatch = await comparePassword(password, user.password);
         if (!isMatch) {
             // throw new Error(`Invalid password`);
-            return callback(null, false, { message: `Invalid password` });
+            return callback(null, false, { message: `Username/password invalid` });
 
         }
 

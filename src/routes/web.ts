@@ -16,7 +16,8 @@ const webRoute = (app: Express) => {
     router.get("/login", getLoginPage)
     router.post('/login', passport.authenticate('local', {
         successRedirect: '/',
-        failureRedirect: '/login'
+        failureRedirect: '/login',
+        failureMessage: true
     }));
 
 

@@ -7,7 +7,7 @@ import { getAllUser, handleCreateUser, handleDeleteUser, getUserById, updateByID
 
 const getHomePage = async (req: Request, res: Response) => {
     const products = await getAllProduct();
-
+    const user = req.user;
     return res.render('client/home/show.ejs', { products });
 }
 

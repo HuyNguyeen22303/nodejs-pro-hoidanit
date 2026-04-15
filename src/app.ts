@@ -4,6 +4,8 @@ import 'dotenv/config';
 import webRoute from "routes/web";
 import initDatabase from "config/seed";
 import { request } from "http";
+import passport from "passport";
+import configPassPortLocal from "./middleware/passport.local";
 
 
 const app = express();
@@ -23,6 +25,12 @@ app.use(express.static('public'))
 // config req.body
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+
+// config passport
+app.use(passport.initialize());
+configPassPortLocal();
+
 
 //config route 
 webRoute(app);

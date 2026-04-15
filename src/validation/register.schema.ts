@@ -9,7 +9,7 @@ const emailSchema = z.string().email("Email không đúng định dạng")
 
     }, {
         message: "Email already exists",
-        path: ["email"],
+
     });
 
 

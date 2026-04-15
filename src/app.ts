@@ -1,8 +1,9 @@
 // const express = require("express");
-import express from "express";
+import express, { response } from "express";
 import 'dotenv/config';
 import webRoute from "routes/web";
 import initDatabase from "config/seed";
+import { request } from "http";
 
 
 const app = express();
@@ -31,6 +32,10 @@ webRoute(app);
 
 initDatabase();
 
+
+app.use(function (req, res) {
+    res.send('404');
+});
 
 
 

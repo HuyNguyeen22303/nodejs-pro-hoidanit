@@ -16,6 +16,12 @@ const hashPassword = async (plainText: string) => {
 
 
 
+const comparePassword = async (plainText: string, hashPassword: string) => {
+    return await bcrypt.compare(plainText, hashPassword); // true or false
+}
+
+
+
 
 const getAllUser = async () => {
     const users = prisma.user.findMany();
@@ -97,4 +103,4 @@ const updateByID = async (id: string, fullName: string, phone: string, address: 
 
 
 
-export { handleCreateUser, getAllUser, handleDeleteUser, getUserById, updateByID, getAllRole, hashPassword }
+export { handleCreateUser, getAllUser, handleDeleteUser, getUserById, updateByID, getAllRole, hashPassword, comparePassword }

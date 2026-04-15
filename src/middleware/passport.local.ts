@@ -1,8 +1,9 @@
 import { prisma } from "config/client";
+import { name } from "ejs";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 
-import { comparePassword } from "services/user.service";
+import { comparePassword, getUserById } from "services/user.service";
 import { callbackify } from "util";
 
 
@@ -43,16 +44,18 @@ const configPassPortLocal = () => {
 
     }));
 
-    passport.serializeUser(function (user: any, cb) {
-        process.nextTick(function () {
-            cb(null, { id: user.id, username: user.username });
-        });
+    passport.serializeUser(function (user: any, callback) { //data trả về cho client , không lưu thông tin nhạy cảm hiện thị cho người dùng 
+
+        callback(null, { id: user.id, username: user.username });
+
     });
 
-    passport.deserializeUser(function (user: any, cb) {
-        process.nextTick(function () {
-            return cb(null, user);
-        });
+    passport.deserializeUser(async function (user: any, callback) { // 
+        const { id, username } = user;
+        //query to database = id
+        const userInDB = await getUserById(id)
+        return callback(null, { ...userInDB }); // ...userInDB là copy full tt người dùng vào ...userInDB
+
     });
 }
 

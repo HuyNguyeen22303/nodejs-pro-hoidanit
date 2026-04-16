@@ -2,8 +2,9 @@ import { prisma } from "config/client";
 import { name } from "ejs";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
+import { getUserRoleById } from "services/client/auth.service";
 
-import { comparePassword, getUserById } from "services/user.service";
+import { comparePassword } from "services/user.service";
 import { callbackify } from "util";
 
 
@@ -53,7 +54,8 @@ const configPassPortLocal = () => {
     passport.deserializeUser(async function (user: any, callback) { // 
         const { id, username } = user;
         //query to database = id
-        const userInDB = await getUserById(id)
+        const userInDB = await getUserRoleById(id)
+
         return callback(null, { ...userInDB }); // ...userInDB là copy full tt người dùng vào ...userInDB
 
     });

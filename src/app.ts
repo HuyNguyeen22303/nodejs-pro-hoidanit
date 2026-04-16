@@ -60,7 +60,11 @@ app.use(express.static('public'))
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
+// config global res.locals req.user  from passport
+app.use((req, res, next) => {
+    res.locals.user = req.user || null; // Pass user object to all views
+    next();
+});
 
 
 

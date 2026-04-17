@@ -7,7 +7,7 @@ import { getAdminCreateProductPage, postAdminCreateProduct, getAdminDetailProduc
 import { get } from 'http';
 import { getLoginPage, getRegisterPage, getsuccessRedirect, postLogout, postRegisterPage } from 'controllers/client/auth.controller';
 import passport from 'passport';
-import { isAdmin, isLogin } from '../middleware/auth';
+import { isAdmin } from '../middleware/auth';
 const router = express.Router();
 const multer = require('multer')
 const upload = multer({ dest: 'uploads/' })
@@ -15,7 +15,7 @@ const webRoute = (app: Express) => {
     router.get("/", getHomePage)
     router.get("/product/:id", getDetailPage)
     router.get("/success-redirect", getsuccessRedirect)
-    router.get("/login", isLogin, getLoginPage)
+    router.get("/login", getLoginPage)
     router.post('/login', passport.authenticate('local', {
         successRedirect: '/success-redirect',
         failureRedirect: '/login',
@@ -34,7 +34,7 @@ const webRoute = (app: Express) => {
 
     // route admin 
 
-    router.get("/admin", isAdmin, getDashboardPage)
+    router.get("/admin", getDashboardPage)
     router.get("/admin/user", getAdminUserPage)
     router.get("/admin/product", getAdminProductPage)
     router.get("/admin/order", getAdminOderPage)
@@ -55,13 +55,11 @@ const webRoute = (app: Express) => {
 
 
 
-    app.use("/", router); //base url 
+    app.use("/", isAdmin, router); //base url 
 }
 
 
-const sum = (a: number, b: number): number => {
-    return a + b;
-}
+
 
 export default webRoute;
 

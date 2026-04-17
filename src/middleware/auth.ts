@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { nextTick } from "process";
+
 
 
 const isLogin = (req: Request, res: Response, next: NextFunction) => {
@@ -13,13 +13,19 @@ const isLogin = (req: Request, res: Response, next: NextFunction) => {
 }
 
 const isAdmin = (req: Request, res: Response, next: NextFunction) => {
-    const user = req.user;
+    if (req.path.startsWith("/admin")) {
+        const user = req.user;
+        if (user?.role?.name === "ADMIN") {
+            return next();
+        }
+        return res.render("status/403.ejs"); // client or guest ko có quyền truy cập vào trang admin 
 
-    if (user?.role?.name === "ADMIN") {
-        next();
-    } else {
-        res.redirect("/");
+
     }
+
+
+    next(); //client routes
+
 
 }
 

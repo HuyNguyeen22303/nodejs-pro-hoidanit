@@ -82,7 +82,8 @@ initDatabase();
 
 
 app.use(function (req, res) {
-    res.send('404');
+    // res.send('404');
+    res.render("status/404.ejs")
 });
 
 

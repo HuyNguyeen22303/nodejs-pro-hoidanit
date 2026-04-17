@@ -1,3 +1,7 @@
+/// <reference path="./types/index.d.ts" />
+
+
+
 // const express = require("express");
 import express, { response } from "express";
 import 'dotenv/config';

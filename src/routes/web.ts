@@ -5,7 +5,7 @@ import fileUploadMiddleware from '../middleware/multer';
 import { getDetailPage } from 'controllers/client/product.controller';
 import { getAdminCreateProductPage, postAdminCreateProduct, getAdminDetailProduct, postAdminUpdateProduct, postDeleteProduct } from 'controllers/admin/product.controller';
 import { get } from 'http';
-import { getLoginPage, getRegisterPage, getsuccessRedirect, postRegisterPage } from 'controllers/client/auth.controller';
+import { getLoginPage, getRegisterPage, getsuccessRedirect, postLogout, postRegisterPage } from 'controllers/client/auth.controller';
 import passport from 'passport';
 import { isAdmin, isLogin } from '../middleware/auth';
 const router = express.Router();
@@ -22,6 +22,7 @@ const webRoute = (app: Express) => {
         failureMessage: true
     }));
 
+    router.post('/logout', postLogout);
 
 
     router.get("/register", getRegisterPage)

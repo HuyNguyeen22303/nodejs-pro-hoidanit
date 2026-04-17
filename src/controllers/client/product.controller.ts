@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getProductById } from "services/client/item.service";
+import { addProductToCart, getProductById } from "services/client/item.service";
 
 
 const getDetailPage = async (req: Request, res: Response) => {
@@ -12,4 +12,22 @@ const getDetailPage = async (req: Request, res: Response) => {
 }
 
 
-export { getDetailPage }
+const postAddProductToCart = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    console.log(id);
+    const user = req.user as any;
+    if (user) {
+        await addProductToCart(+id, 1, user);
+    } else {
+        return
+    }
+
+
+    return res.redirect("/");
+
+}
+
+
+
+
+export { getDetailPage, postAddProductToCart }

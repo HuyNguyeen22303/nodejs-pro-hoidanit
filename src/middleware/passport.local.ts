@@ -54,7 +54,7 @@ const configPassPortLocal = () => {
     passport.deserializeUser(async function (user: any, callback) { // 
         const { id, username } = user;
         //query to database = id
-        const userInDB = await getUserRoleById(id)
+        const userInDB: any = await getUserRoleById(id)
 
         return callback(null, { ...userInDB }); // ...userInDB là copy full tt người dùng vào ...userInDB
 

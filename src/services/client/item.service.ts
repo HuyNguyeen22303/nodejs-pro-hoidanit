@@ -46,7 +46,7 @@ const addProductToCart = async (productId: number, quantity: number, user: Expre
 
             data: {
                 sum: {
-                    increment: 1,
+                    increment: quantity,
                 },
             }
         })

@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { userInfo } from "os";
 import { addProductToCart, getProductById } from "services/client/item.service";
 
 
@@ -28,6 +29,25 @@ const postAddProductToCart = async (req: Request, res: Response) => {
 }
 
 
+const getCartPage = async (req: Request, res: Response) => {
+    const user = req.user;
+    if (!user) {
+        return res.redirect("/");
+    }
 
 
-export { getDetailPage, postAddProductToCart }
+
+    res.render("client/product/cart.ejs")
+
+
+
+
+}
+
+
+
+
+
+
+
+export { getDetailPage, postAddProductToCart, getCartPage }

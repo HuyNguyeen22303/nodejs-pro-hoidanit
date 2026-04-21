@@ -71,6 +71,11 @@ app.use((req, res, next) => {
 });
 
 
+app.use((req, res, next) => {
+    res.locals.user = req.user || null; // Pass user object to all views
+    next();
+});
+
 
 //config route 
 webRoute(app);

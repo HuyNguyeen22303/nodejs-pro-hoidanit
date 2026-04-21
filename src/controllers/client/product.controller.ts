@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { userInfo } from "os";
-import { addProductToCart, getProductById } from "services/client/item.service";
+import { toASCII } from "punycode";
+import { addProductToCart, getDetailCart, getProductById } from "services/client/item.service";
 
 
 const getDetailPage = async (req: Request, res: Response) => {
@@ -36,13 +37,25 @@ const getCartPage = async (req: Request, res: Response) => {
     }
 
 
-
-    res.render("client/product/cart.ejs")
-
+    const cartDetail = await getDetailCart(user);
 
 
+
+
+    const totalPrice = cartDetail?.map(item => item.price * item.quantity).reduce((a, b) => a + b, 0);
+
+
+
+
+
+
+    res.render("client/product/cart.ejs", {
+        cartDetail, totalPrice
+    })
 
 }
+
+
 
 
 

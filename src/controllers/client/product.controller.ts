@@ -42,7 +42,7 @@ const getCartPage = async (req: Request, res: Response) => {
 
 
 
-    const totalPrice = cartDetail?.map(item => item.price * item.quantity).reduce((a, b) => a + b, 0);
+    const totalPrice = cartDetail?.map(item => item.price * item.quantity)?.reduce((a, b) => a + b, 0) || 0;
 
 
 

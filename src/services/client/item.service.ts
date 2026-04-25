@@ -1,4 +1,5 @@
 import { prisma } from "config/client"
+import { any } from "zod";
 
 
 
@@ -129,6 +130,37 @@ const getDetailCart = async (user: Express.User) => {
 
 
 }
+// post Delete cartDetail and Cart
+const postDeleteCart = async (CartDetailId: number, userId: number, sumCart: number) => {
+    await prisma.cartDetail.delete({
+        where: {
+            id: CartDetailId,
+        }
+    });
+    if (sumCart === 1) {
+        // xóa sản phẩm nếu giỏ hàng có 1 sản phẩm
+        await prisma.cart.delete({
+            where: {
+                userId
+            }
+        })
+    } else {
+        //update cart nếu sản phẩm > 1
+        await prisma.cart.update({
+            where: {
+                userId
+            },
+            data: {
+                sum: {
+                    decrement: 1,
+                }
+            }
+        })
+    }
+}
 
 
-export { getAllProduct, getProductById, addProductToCart, getDetailCart }
+
+
+
+export { getAllProduct, getProductById, addProductToCart, getDetailCart, postDeleteCart }

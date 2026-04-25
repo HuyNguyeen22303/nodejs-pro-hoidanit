@@ -1,7 +1,7 @@
-import { Request, Response } from "express";
+import { Request, Response, urlencoded } from "express";
 import { userInfo } from "os";
 import { toASCII } from "punycode";
-import { addProductToCart, getDetailCart, getProductById } from "services/client/item.service";
+import { addProductToCart, getDetailCart, getProductById, postDeleteCart } from "services/client/item.service";
 
 
 const getDetailPage = async (req: Request, res: Response) => {
@@ -56,6 +56,20 @@ const getCartPage = async (req: Request, res: Response) => {
 }
 
 
+const postDeleteProductInCart = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const user = req.user;
+    if (user) {
+        await postDeleteCart(+id, user.id, user.sumCart as any)
+    } else {
+        return res.redirect("/login");
+    }
+
+
+    return res.redirect("/cart");
+
+
+}
 
 
 
@@ -63,4 +77,8 @@ const getCartPage = async (req: Request, res: Response) => {
 
 
 
-export { getDetailPage, postAddProductToCart, getCartPage }
+
+
+
+
+export { getDetailPage, postAddProductToCart, getCartPage, postDeleteProductInCart }

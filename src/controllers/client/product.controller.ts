@@ -35,24 +35,11 @@ const getCartPage = async (req: Request, res: Response) => {
     if (!user) {
         return res.redirect("/");
     }
-
-
     const cartDetail = await getDetailCart(user);
-
-
-
-
     const totalPrice = cartDetail?.map(item => item.price * item.quantity)?.reduce((a, b) => a + b, 0) || 0;
-
-
-
-
-
-
     res.render("client/product/cart.ejs", {
         cartDetail, totalPrice
     })
-
 }
 
 
@@ -74,6 +61,17 @@ const postDeleteProductInCart = async (req: Request, res: Response) => {
 
 
 
+const getCheckOutPage = async (req: Request, res: Response) => {
+    const user = req.user;
+    if (!user) {
+        return res.redirect("/");
+    }
+    const cartDetail = await getDetailCart(user);
+    const totalPrice = cartDetail?.map(item => item.price * item.quantity)?.reduce((a, b) => a + b, 0) || 0;
+    res.render("client/product/checkout.ejs", {
+        cartDetail, totalPrice
+    })
+}
 
 
 
@@ -81,4 +79,9 @@ const postDeleteProductInCart = async (req: Request, res: Response) => {
 
 
 
-export { getDetailPage, postAddProductToCart, getCartPage, postDeleteProductInCart }
+
+
+
+
+
+export { getDetailPage, postAddProductToCart, getCartPage, postDeleteProductInCart, getCheckOutPage }

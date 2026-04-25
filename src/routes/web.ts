@@ -2,7 +2,7 @@ import express, { Express } from 'express';
 import { getCreateUserPage, getHomePage, postCreateUser, postDeleteUser, getViewUser, postEditUser } from "controllers/user.controller";
 import { getDashboardPage, getAdminUserPage, getAdminProductPage, getAdminOderPage } from 'controllers/admin/dashboard.controller';
 import fileUploadMiddleware from '../middleware/multer';
-import { getCartPage, getDetailPage, postAddProductToCart, postDeleteProductInCart } from 'controllers/client/product.controller';
+import { getCartPage, getCheckOutPage, getDetailPage, postAddProductToCart, postDeleteProductInCart } from 'controllers/client/product.controller';
 import { getAdminCreateProductPage, postAdminCreateProduct, getAdminDetailProduct, postAdminUpdateProduct, postDeleteProduct } from 'controllers/admin/product.controller';
 import { get } from 'http';
 import { getLoginPage, getRegisterPage, getsuccessRedirect, postLogout, postRegisterPage } from 'controllers/client/auth.controller';
@@ -29,6 +29,7 @@ const webRoute = (app: Express) => {
     router.post("/register", postRegisterPage)
     router.post("/add-product-to-cart/:id", postAddProductToCart);
     router.get("/cart", getCartPage);
+    router.get("/checkout", getCheckOutPage);
 
     router.post("/delete-product-in-cart/:id", postDeleteProductInCart);
 

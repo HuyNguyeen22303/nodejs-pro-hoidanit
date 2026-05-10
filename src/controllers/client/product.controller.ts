@@ -1,7 +1,7 @@
 import { Request, Response, urlencoded } from "express";
 import { userInfo } from "os";
 import { toASCII } from "punycode";
-import { addProductToCart, getDetailCart, getProductById, postDeleteCart } from "services/client/item.service";
+import { addProductToCart, getDetailCart, getProductById, postDeleteCart, updateCartDetailBeforeCheckOut } from "services/client/item.service";
 
 
 const getDetailPage = async (req: Request, res: Response) => {
@@ -74,6 +74,14 @@ const getCheckOutPage = async (req: Request, res: Response) => {
 }
 
 
+const postHandleCartToCheckOut = async (req: Request, Res: Response) => {
+    const user = req.user;
+    if (!user) return Res.redirect("/login");
+    console.log(req.body);
+    const currentCartDetail: { id: string, quantity: string }[] = req.body?.cartDetails ?? [];
+    await updateCartDetailBeforeCheckOut(currentCartDetail);
+    return Res.redirect("/checkout");
+}
 
 
 
@@ -84,4 +92,5 @@ const getCheckOutPage = async (req: Request, res: Response) => {
 
 
 
-export { getDetailPage, postAddProductToCart, getCartPage, postDeleteProductInCart, getCheckOutPage }
+
+export { getDetailPage, postAddProductToCart, getCartPage, postDeleteProductInCart, getCheckOutPage, postHandleCartToCheckOut }

@@ -1,4 +1,5 @@
 import { prisma } from "config/client"
+import { create } from "domain";
 import { any } from "zod";
 
 
@@ -174,4 +175,58 @@ const updateCartDetailBeforeCheckOut = async (data: { id: string, quantity: stri
 }
 
 
-export { getAllProduct, getProductById, addProductToCart, getDetailCart, postDeleteCart, updateCartDetailBeforeCheckOut }
+
+const handlerPlaceOrder = async (userId: number, receiverName: string, receiverAddress: string, receiverPhone: string, totalPrice: number) => {
+    const cart = await prisma.cart.findUnique({
+        where: {
+            userId: userId,
+
+        },
+        include: {
+            CartDetails: true
+        }
+    })
+    if (cart) {
+        // create order
+        const dataOrderDetail = cart?.CartDetails?.map(item => ({
+            price: item.price,
+            quantity: item.quantity,
+            productId: item.productId
+
+
+        })) ?? []
+        await prisma.order.create({
+            data: {
+                totalPrice: totalPrice,
+                paymentMethod: "COD",
+                paymentStatus: "PAYMENT_UNPAID",
+                status: "PENDING",
+                receiverName: receiverName,
+                receiverAddress: receiverAddress,
+                receiverPhone: receiverPhone,
+                userId: userId,
+                orderDetails: {
+                    create: dataOrderDetail,
+                }
+            }
+        })
+
+
+
+
+    }
+
+    await prisma.cartDetail.deleteMany({
+        where: {
+            cartID: cart?.id
+        }
+    })
+    await prisma.cart.delete({
+        where: {
+            id: cart?.id
+        }
+    })
+}
+
+
+export { getAllProduct, getProductById, addProductToCart, getDetailCart, postDeleteCart, updateCartDetailBeforeCheckOut, handlerPlaceOrder }

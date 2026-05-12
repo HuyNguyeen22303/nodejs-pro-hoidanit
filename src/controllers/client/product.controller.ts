@@ -1,7 +1,7 @@
 import { Request, Response, urlencoded } from "express";
 import { userInfo } from "os";
 import { toASCII } from "punycode";
-import { addProductToCart, getDetailCart, getProductById, postDeleteCart, updateCartDetailBeforeCheckOut } from "services/client/item.service";
+import { addProductToCart, getDetailCart, getProductById, handlerPlaceOrder, postDeleteCart, updateCartDetailBeforeCheckOut } from "services/client/item.service";
 
 
 const getDetailPage = async (req: Request, res: Response) => {
@@ -85,6 +85,27 @@ const postHandleCartToCheckOut = async (req: Request, Res: Response) => {
 
 
 
+const postPlaceOrder = async (req: Request, res: Response) => {
+    const user = req.user;
+    if (!user) return res.redirect("/login");
+    const { receiverName,
+        receiverAddress,
+        receiverPhone,
+        totalPrice
+    } = req.body
+
+    await handlerPlaceOrder(user.id, receiverName, receiverAddress, receiverPhone, +totalPrice);
+    res.redirect("thanks")
+}
+
+
+const getThanks = (req: Request, res: Response) => {
+    const user = req.user;
+    if (!user) return res.render("/login");
+
+
+    return res.render("client/product/thanks.ejs");
+}
 
 
 
@@ -93,4 +114,11 @@ const postHandleCartToCheckOut = async (req: Request, Res: Response) => {
 
 
 
-export { getDetailPage, postAddProductToCart, getCartPage, postDeleteProductInCart, getCheckOutPage, postHandleCartToCheckOut }
+
+
+
+
+export {
+    getDetailPage, postAddProductToCart, getCartPage, postDeleteProductInCart, getCheckOutPage, postHandleCartToCheckOut, postPlaceOrder
+    , getThanks
+}

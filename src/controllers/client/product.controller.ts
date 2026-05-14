@@ -101,7 +101,7 @@ const postPlaceOrder = async (req: Request, res: Response) => {
 
 const getThanks = (req: Request, res: Response) => {
     const user = req.user;
-    if (!user) return res.render("/login");
+    if (!user) return res.redirect("/login");
 
 
     return res.render("client/product/thanks.ejs");

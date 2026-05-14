@@ -70,4 +70,9 @@ const postDeleteProductById = async (id: number) => {
 }
 
 
+
+
+
+
+
 export { createProduct, getAllProduct, getProductById, postUpdateProductById, postDeleteProductById }

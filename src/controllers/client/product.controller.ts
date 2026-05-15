@@ -1,6 +1,7 @@
 import { Request, Response, urlencoded } from "express";
 import { userInfo } from "os";
 import { toASCII } from "punycode";
+import { handlerOrderHistory } from "services/admin/order.service";
 import { addProductToCart, getDetailCart, getProductById, handlerPlaceOrder, postDeleteCart, updateCartDetailBeforeCheckOut } from "services/client/item.service";
 
 
@@ -108,6 +109,18 @@ const getThanks = (req: Request, res: Response) => {
 }
 
 
+const getOrderHistory = async (req: Request, res: Response) => {
+    const user = req.user;
+    if (!user) return res.redirect("/login");
+
+
+    const orderHistory = await handlerOrderHistory(user.id);
+    console.log(orderHistory);
+
+    return res.render("client/product/orderHistory.ejs", { orderHistory });
+}
+
+
 
 
 
@@ -120,5 +133,5 @@ const getThanks = (req: Request, res: Response) => {
 
 export {
     getDetailPage, postAddProductToCart, getCartPage, postDeleteProductInCart, getCheckOutPage, postHandleCartToCheckOut, postPlaceOrder
-    , getThanks
+    , getThanks, getOrderHistory
 }

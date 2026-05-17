@@ -15,7 +15,7 @@ const getAllProduct = async () => {
 const getProductById = async (id: number) => {
     return prisma.product.findUnique({
         where: {
-            id: id
+            id: +id
         }
     })
 }
@@ -69,7 +69,7 @@ const addProductToCart = async (productId: number, quantity: number, user: Expre
             },
             update: {
                 quantity: {
-                    increment: 1,
+                    increment: quantity,
                 },
 
 
@@ -133,11 +133,21 @@ const getDetailCart = async (user: Express.User) => {
 }
 // post Delete cartDetail and Cart
 const postDeleteCart = async (CartDetailId: number, userId: number, sumCart: number) => {
+    const currentCartDetail = await prisma.cartDetail.findUnique({
+        where: {
+            id: CartDetailId
+
+        }
+    })
+
+
+    const quantity = currentCartDetail?.quantity;
     await prisma.cartDetail.delete({
         where: {
             id: CartDetailId,
         }
     });
+
     if (sumCart === 1) {
         // xóa sản phẩm nếu giỏ hàng có 1 sản phẩm
         await prisma.cart.delete({
@@ -153,7 +163,7 @@ const postDeleteCart = async (CartDetailId: number, userId: number, sumCart: num
             },
             data: {
                 sum: {
-                    decrement: 1,
+                    decrement: quantity,
                 }
             }
         })
@@ -161,17 +171,26 @@ const postDeleteCart = async (CartDetailId: number, userId: number, sumCart: num
 }
 
 
-const updateCartDetailBeforeCheckOut = async (data: { id: string, quantity: string }[]) => {
+const updateCartDetailBeforeCheckOut = async (data: { id: string, quantity: string, cartId: string }[]) => {
     for (let i = 0; i < data.length; i++) {
         await prisma.cartDetail.update({
             where: {
                 id: +data[i].id,
             },
             data: {
-                quantity: +(data[i].quantity)
+                quantity: +(data[i].quantity),
+
             }
         })
+
+
+
+
+
     }
+
+
+
 }
 
 

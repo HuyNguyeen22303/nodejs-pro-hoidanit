@@ -78,6 +78,7 @@ const postHandleCartToCheckOut = async (req: Request, Res: Response) => {
     if (!user) return Res.redirect("/login");
     console.log(req.body);
     const currentCartDetail: { id: string, quantity: string, cartId: string }[] = req.body?.cartDetails ?? [];
+    console.log(currentCartDetail);
     await updateCartDetailBeforeCheckOut(currentCartDetail);
     return Res.redirect("/checkout");
 }

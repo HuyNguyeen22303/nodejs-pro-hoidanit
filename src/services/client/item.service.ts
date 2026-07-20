@@ -172,22 +172,38 @@ const postDeleteCart = async (CartDetailId: number, userId: number, sumCart: num
 
 
 const updateCartDetailBeforeCheckOut = async (data: { id: string, quantity: string, cartId: string }[]) => {
+    let totalSum = 0;
+    let currentCartId = 0;
     for (let i = 0; i < data.length; i++) {
+        const item = data[i]; // Lấy phần tử hiện tại ra để dùng
+        currentCartId = +item.cartId; // Lưu lại cartId để dùng sau vòng lặp
+        totalSum += +item.quantity;
         await prisma.cartDetail.update({
             where: {
-                id: +data[i].id,
+                id: +item.id,
             },
             data: {
-                quantity: +(data[i].quantity),
+                quantity: +item.quantity,
 
             }
         })
+        if (currentCartId > 0) {
+            await prisma.cart.update({
+                where: {
+                    id: currentCartId,
+                },
+                data: {
+                    sum: +totalSum
+                }
+            })
+        }
 
 
 
 
 
     }
+
 
 
 

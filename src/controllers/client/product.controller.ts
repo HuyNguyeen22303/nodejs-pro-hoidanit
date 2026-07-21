@@ -1,8 +1,8 @@
 import { Request, Response, urlencoded } from "express";
 import { userInfo } from "os";
 import { toASCII } from "punycode";
-import { handlerOrderHistory } from "services/admin/order.service";
-import { addProductToCart, getDetailCart, getProductById, handlerPlaceOrder, postDeleteCart, updateCartDetailBeforeCheckOut } from "services/client/item.service";
+
+import { addProductToCart, getDetailCart, getProductById, handlerOrderHistory, handlerPlaceOrder, postDeleteCart, updateCartDetailBeforeCheckOut } from "services/client/item.service";
 
 
 const getDetailPage = async (req: Request, res: Response) => {
@@ -88,15 +88,18 @@ const postHandleCartToCheckOut = async (req: Request, Res: Response) => {
 const postPlaceOrder = async (req: Request, res: Response) => {
     const user = req.user;
     if (!user) return res.redirect("/login");
-    const { receiverName,
-        receiverAddress,
-        receiverPhone,
-        totalPrice
-    } = req.body
 
-    await handlerPlaceOrder(user.id, receiverName, receiverAddress, receiverPhone, +totalPrice);
-    res.redirect("thanks")
+    const { receiverName, receiverAddress, receiverPhone, totalPrice } = req.body;
+
+    try {
+        await handlerPlaceOrder(user.id, receiverName, receiverAddress, receiverPhone, +totalPrice);
+        return res.redirect("/thanks");
+    } catch (error: any) {
+        console.error("Đặt hàng thất bại:", error.message);
+        return res.redirect("/checkout")
+    }
 }
+
 
 
 const getThanks = (req: Request, res: Response) => {

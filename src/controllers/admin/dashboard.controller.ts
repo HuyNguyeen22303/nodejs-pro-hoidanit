@@ -3,7 +3,8 @@ import { Request, Response } from "express";
 import { getDashboardInfo } from "services/admin/dashboard.service";
 import { handlerGetAllOrder, handlerGetOrderDetailById } from "services/admin/order.service";
 import { getAllProduct } from "services/admin/product.service";
-import { getAllUser } from "services/user.service";
+import { getAllUser, countTotalUserPage } from "services/user.service";
+import { number } from "zod";
 
 
 
@@ -15,12 +16,26 @@ const getDashboardPage = async (req: Request, res: Response) => {
     return res.render('admin/dashboard/show.ejs', { info });
 }
 const getAdminUserPage = async (req: Request, res: Response) => {
-    const users = await getAllUser();
+
+    const { page } = req.query;
+
+    let currentPage = page ? +page : 1;
+    if (currentPage <= 1) currentPage = 1;
+
+
+
+    const users = await getAllUser(currentPage);
+    const totalPages = await countTotalUserPage();
 
     return res.render('admin/user/show.ejs', {
-        users: users
+        users: users,
+        totalPages: +totalPages,
+        page: currentPage
+
     });
 }
+
+
 const getAdminProductPage = async (req: Request, res: Response) => {
     const products = await getAllProduct()
 

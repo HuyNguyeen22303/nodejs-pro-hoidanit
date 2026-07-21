@@ -5,9 +5,10 @@ import { PrismaClient } from '../../generated/prisma';
 import { name } from 'ejs';
 import { prisma } from 'config/client';
 import 'dotenv/config';
-import { ACCOUNT_TYPE } from 'config/constants';
+import { ACCOUNT_TYPE, TOTAL_ITEM_PER_PAGE } from 'config/constants';
 
 import bcrypt from 'bcrypt';
+import { skip } from '@prisma/client/runtime/library';
 const saltRounds = 10;
 
 const hashPassword = async (plainText: string) => {
@@ -23,11 +24,24 @@ const comparePassword = async (plainText: string, hashPassword: string) => {
 
 
 
-const getAllUser = async () => {
-    const users = prisma.user.findMany();
+const getAllUser = async (page: number) => {
+    const pageSize = TOTAL_ITEM_PER_PAGE;
+    const users = prisma.user.findMany(
+        {
+            skip: (page - 1) * pageSize,
+            take: pageSize,
+        }
+    );
     return users;
 
 
+}
+
+const countTotalUserPage = async () => {
+    const pageSize = TOTAL_ITEM_PER_PAGE;
+    const totalItems = await prisma.user.count();
+    const totalPages = Math.ceil(totalItems / pageSize);
+    return totalPages;
 }
 
 
@@ -103,4 +117,4 @@ const updateByID = async (id: string, fullName: string, phone: string, address: 
 
 
 
-export { handleCreateUser, getAllUser, handleDeleteUser, getUserById, updateByID, getAllRole, hashPassword, comparePassword }
+export { handleCreateUser, getAllUser, handleDeleteUser, getUserById, updateByID, getAllRole, hashPassword, comparePassword, countTotalUserPage }

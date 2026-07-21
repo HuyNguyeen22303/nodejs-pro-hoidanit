@@ -253,6 +253,7 @@ const handlerPlaceOrder = async (
                 data: {
                     quantity: product.quantity - item.quantity,
                     sold: (product.sold || 0) + item.quantity
+
                 }
             });
         }

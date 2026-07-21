@@ -1,5 +1,4 @@
 import { prisma } from "config/client"
-import { error } from "console";
 import { create } from "domain";
 import { any } from "zod";
 
@@ -212,59 +211,26 @@ const updateCartDetailBeforeCheckOut = async (data: { id: string, quantity: stri
 
 
 
-const handlerPlaceOrder = async (
-    userId: number,
-    receiverName: string,
-    receiverAddress: string,
-    receiverPhone: string,
-    totalPrice: number
-) => {
-    // Tăng timeout lên 15000ms (15 giây) để tránh bị hủy giữa chừng
-    await prisma.$transaction(async (tx) => {
+const handlerPlaceOrder = async (userId: number, receiverName: string, receiverAddress: string, receiverPhone: string, totalPrice: number) => {
+    const cart = await prisma.cart.findUnique({
+        where: {
+            userId: userId,
 
-        // 1. Lấy thông tin giỏ hàng
-        const cart = await tx.cart.findUnique({
-            where: { userId: userId },
-            include: { CartDetails: true }
-        });
-
-        if (!cart || cart.CartDetails.length === 0) {
-            throw new Error("Giỏ hàng không tồn tại hoặc trống.");
+        },
+        include: {
+            CartDetails: true
         }
-
-        // 2. KIỂM TRA KHO VÀ UPDATE (Chạy trước để nếu lỗi thì hủy ngay tại đây)
-        for (const item of cart.CartDetails) {
-            const product = await tx.product.findUnique({
-                where: { id: item.productId }
-            });
-
-            if (!product || product.quantity < item.quantity) {
-                throw new Error(`Sản phẩm mã số ${item.productId} không đủ hàng trong kho.`);
-            }
-
-            // Trừ kho luôn trong vòng lặp
-            await tx.product.update({
-                where: { id: item.productId },
-                data: { quantity: product.quantity - item.quantity }
-            });
-            // Trừ kho luôn trong vòng lặp
-            await tx.product.update({
-                where: { id: item.productId },
-                data: {
-                    quantity: product.quantity - item.quantity,
-                    sold: (product.sold || 0) + item.quantity
-                }
-            });
-        }
-
-        // 3. TẠO ĐƠN HÀNG
-        const dataOrderDetail = cart.CartDetails.map(item => ({
+    })
+    if (cart) {
+        // create order
+        const dataOrderDetail = cart?.CartDetails?.map(item => ({
             price: item.price,
             quantity: item.quantity,
             productId: item.productId
-        }));
 
-        await tx.order.create({
+
+        })) ?? []
+        await prisma.order.create({
             data: {
                 totalPrice: totalPrice,
                 paymentMethod: "COD",
@@ -278,42 +244,24 @@ const handlerPlaceOrder = async (
                     create: dataOrderDetail,
                 }
             }
-        });
-
-        // 4. XÓA GIỎ HÀNG (Đặt ở cuối cùng)
-        await tx.cartDetail.deleteMany({
-            where: { cartID: cart.id }
-        });
-
-        await tx.cart.delete({
-            where: { id: cart.id }
-        });
-
-    }, {
-        maxWait: 5000, // Thời gian tối đa chờ kết nối transaction (5s)
-        timeout: 15000 // Thời gian tối đa thực thi transaction (15s)
-    });
-}
+        })
 
 
 
 
-const handlerOrderHistory = async (userId: number) => {
+    }
 
-    const orderHistory = await prisma.order.findMany({
-        where: { userId },
-        include: {
-            orderDetails: {
-                include: {
-                    product: true
-                }
-            }
+    await prisma.cartDetail.deleteMany({
+        where: {
+            cartID: cart?.id
         }
-
     })
-
-    return orderHistory
+    await prisma.cart.delete({
+        where: {
+            id: cart?.id
+        }
+    })
 }
 
 
-export { getAllProduct, getProductById, addProductToCart, getDetailCart, postDeleteCart, updateCartDetailBeforeCheckOut, handlerPlaceOrder, handlerOrderHistory }
+export { getAllProduct, getProductById, addProductToCart, getDetailCart, postDeleteCart, updateCartDetailBeforeCheckOut, handlerPlaceOrder }

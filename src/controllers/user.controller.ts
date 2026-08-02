@@ -1,16 +1,39 @@
 import getConnection from "config/database";
 import { Request, Response } from "express";
-import { getAllProduct } from "services/client/item.service";
+import { countTotalAllProduct, getAllProduct } from "services/client/item.service";
 import { getAllUser, handleCreateUser, handleDeleteUser, getUserById, updateByID, getAllRole } from "services/user.service";
 
 
 
 const getHomePage = async (req: Request, res: Response) => {
-    const products = await getAllProduct();
-    const user = req.user;
-    console.log("Current user: ", user);
 
-    return res.render('client/home/show.ejs', { products });
+    const { page } = req.query;
+    let currentPage = page ? +page : 1;
+    if (currentPage <= 1) currentPage = 1;
+    const products = await getAllProduct(currentPage, 8);
+
+    const totalPages = await countTotalAllProduct(8);
+
+
+
+    return res.render('client/home/show.ejs', {
+        products, totalPages: totalPages, page: currentPage
+
+    });
+}
+
+
+const getProductFilterPage = async (req: Request, res: Response) => {
+    const { page } = req.query;
+    let currentPage = page ? +page : 1;
+
+    const products = await getAllProduct(currentPage, 6);
+
+    const totalPages = await countTotalAllProduct(6);
+
+
+    return res.render('client/product/filter.ejs', { products, totalPages: totalPages, page: currentPage });
+
 }
 
 
@@ -83,4 +106,4 @@ const postEditUser = async (req: Request, res: Response) => {
 
 
 
-export { getHomePage, getCreateUserPage, postCreateUser, postDeleteUser, getViewUser, postEditUser };
+export { getHomePage, getCreateUserPage, postCreateUser, postDeleteUser, getViewUser, postEditUser, getProductFilterPage };

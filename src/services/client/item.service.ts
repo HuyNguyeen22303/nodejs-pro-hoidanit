@@ -5,10 +5,22 @@ import { any } from "zod";
 
 
 
-const getAllProduct = async () => {
-    const products = await prisma.product.findMany();
+const getAllProduct = async (page: number, PageSize: number) => {
+    const products = await prisma.product.findMany({
+        skip: (page - 1) * PageSize,
+        take: PageSize
+    });
     return products;
 }
+
+
+const countTotalAllProduct = async (pageSize: number) => {
+    const countProduct = await prisma.product.count();
+    const totalPages = Math.ceil(countProduct / pageSize)
+    console.log("tong item product" + totalPages)
+    return totalPages;
+}
+
 
 
 
@@ -264,4 +276,4 @@ const handlerPlaceOrder = async (userId: number, receiverName: string, receiverA
 }
 
 
-export { getAllProduct, getProductById, addProductToCart, getDetailCart, postDeleteCart, updateCartDetailBeforeCheckOut, handlerPlaceOrder }
+export { getAllProduct, getProductById, addProductToCart, getDetailCart, postDeleteCart, updateCartDetailBeforeCheckOut, handlerPlaceOrder, countTotalAllProduct }

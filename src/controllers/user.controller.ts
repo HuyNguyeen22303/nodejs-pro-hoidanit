@@ -1,7 +1,9 @@
 import getConnection from "config/database";
 import { Request, Response } from "express";
 import { countTotalAllProduct, getAllProduct } from "services/client/item.service";
+import { getProductWithFilter } from "services/client/product.filter";
 import { getAllUser, handleCreateUser, handleDeleteUser, getUserById, updateByID, getAllRole } from "services/user.service";
+import { string } from "zod";
 
 
 
@@ -22,17 +24,23 @@ const getHomePage = async (req: Request, res: Response) => {
     });
 }
 
-
 const getProductFilterPage = async (req: Request, res: Response) => {
-    const { page } = req.query;
+    const { page, price = "", factory = "", target = "", sort = "" } = req.query as {
+        page?: string;
+        price: string;
+        factory: string;
+        target: string;
+        sort: string;
+    };
     let currentPage = page ? +page : 1;
 
-    const products = await getAllProduct(currentPage, 6);
+    // const products = await getAllProduct(currentPage, 6);
 
-    const totalPages = await countTotalAllProduct(6);
+    // const totalPages = await countTotalAllProduct(6);
 
+    const data = await getProductWithFilter(currentPage, 6, factory, target, price, sort);
 
-    return res.render('client/product/filter.ejs', { products, totalPages: totalPages, page: currentPage });
+    return res.render('client/product/filter.ejs', { products: data.products, totalPages: +data.totalPages, page: currentPage });
 
 }
 
